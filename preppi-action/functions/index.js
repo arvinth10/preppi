@@ -68,7 +68,7 @@ exports.preppi = functions.https.onRequest((request, response) => {
 
     app.ask(app.buildRichResponse()
       // Create a basic card and add it to the rich response
-      .addSimpleResponse('Session Stats')
+      .addSimpleResponse('Here are the stats for your current session.')
       .addBasicCard(app.buildBasicCard("*What You Wanted To Say*  \n" + missedResults
                                      + "  \n  -----  \n" + "*What You Said*  \n" + addedResults)
       .setTitle('Results From Current Session')
