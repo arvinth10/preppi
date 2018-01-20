@@ -67,8 +67,6 @@ exports.preppi = functions.https.onRequest((request, response) => {
     }
   }
 
-
-<<<<<<< HEAD
   //Returns an array of missed words
 function getDifferenceMissedArray (correctText, speechText){
 
@@ -120,8 +118,6 @@ function getDifferenceAddedArray (correctText, speechText){
 return addedWords;
 
 }
-=======
->>>>>>> da64df4f1e35e4b7751882e92d06eb19cb5f1e8d
 
   // d. build an action map, which maps intent names to functions
   let actionMap = new Map();
