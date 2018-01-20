@@ -10,6 +10,7 @@ process.env.DEBUG = 'actions-on-google:*';
 const App = require('actions-on-google').DialogflowApp;
 const functions = require('firebase-functions');
 const fb_database = require('./database.js');
+const text_compare = require('./textCompare.js');
 const prettydiff = require("prettydiff");
 const jsdom = require("jsdom");
 const domtoimage = require('dom-to-image');
@@ -45,14 +46,13 @@ exports.preppi = functions.https.onRequest((request, response) => {
   function processSpeech (app) {
     let text = app.getArgument(SPEECH_ARGUMENT);
     let response = compareSpeech(text);
+    let results = text_compare.htmlOfMissed();
 
     app.ask(app.buildRichResponse()
       // Create a basic card and add it to the rich response
         .addSimpleResponse(response)
-        .addBasicCard(app.buildBasicCard('SHOW HTML TABLE HERE')
+        .addBasicCard(app.buildBasicCard(results)
         .setTitle('Results From Current Session')
-        .setImage('https://example.google.com/42.png', 'Session Results')
-        .setImageDisplay('CROPPED')
       )
     );
 
