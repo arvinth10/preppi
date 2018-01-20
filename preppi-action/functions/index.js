@@ -53,19 +53,16 @@ exports.preppi = functions.https.onRequest((request, response) => {
     let response = compareSpeech(text);
     let missedResults = text_compare.textMissed(TEST_SPEECH_TEXT, text);
     let addedResults = text_compare.textAdded(TEST_SPEECH_TEXT, text);
-    app.askWithList('Results From Curren Session',
-    // Build a list
-    app.buildList('Results From Current Session')
-    // Add the first item to the list
-    .addItems(app.buildOptionItem('Original Text', ['', '', '', ''])
-      .setTitle('What you wanted to say')
-      .setDescription(missedResults))
-    // Add the second item to the list
-    .addItems(app.buildOptionItem('User Text', ['', '', '', ''])
-      .setTitle('What you said')
-      .setDescription(addedResults)
-    )
-  );}
+
+    app.ask(app.buildRichResponse()
+      // Create a basic card and add it to the rich response
+      .addSimpleResponse('Session Stats')
+      .addBasicCard(app.buildBasicCard("*What You Wanted To Say*  \n" + missedResults
+                                     + "  \n  -----  \n" + "*What You Said*  \n" + addedResults)
+      .setTitle('Results From Current Session')
+      )
+    );
+  }
 
   function compareSpeech (text) {
     if (text == TEST_SPEECH_TEXT) {

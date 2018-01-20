@@ -13,20 +13,15 @@ module.exports.textMissed = function (correctText, speechText){
       if(part.removed == true){
         stringToReturn = stringToReturn.concat(" **");
         stringToReturn = stringToReturn.concat(part.value);
-        stringToReturn = stringToReturn.concat("**");
-      }else if (part.added == false){
+        stringToReturn = stringToReturn.concat("** ");
+      }else if (part.added == undefined){
         stringToReturn = stringToReturn.concat(part.value);
       }
 
   });
 
   return stringToReturn;
-
-
-
-
 }
-
 
 //Returns a string of added text with bolding done
 module.exports.textAdded = function (correctText, speechText){
@@ -41,7 +36,7 @@ module.exports.textAdded = function (correctText, speechText){
         stringToReturn = stringToReturn.concat(" **");
         stringToReturn = stringToReturn.concat(part.value);
         stringToReturn = stringToReturn.concat("**");
-      }else if (part.removed == false){
+      }else if (part.removed == undefined){
         stringToReturn = stringToReturn.concat(part.value);
       }
 
