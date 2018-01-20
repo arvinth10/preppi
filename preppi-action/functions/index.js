@@ -25,7 +25,7 @@ const SPEECH_ACTION = 'get_userText';
   // const NUMBER_ARGUMENT = 'number';
 const DOC_NAME_ARGUMENT = 'given-name';
 const SPEECH_ARGUMENT = 'userText';
-const TEST_SPEECH_TEXT = "";
+const TEST_SPEECH_TEXT = "what is your face?";
 fb_database.setupSessionsTable();
 
 exports.preppi = functions.https.onRequest((request, response) => {
@@ -38,7 +38,7 @@ exports.preppi = functions.https.onRequest((request, response) => {
     let doc_name = app.getArgument(DOC_NAME_ARGUMENT);
 
     fb_database.findDocName(doc_name).then(function(response){
-      TEST_SPEECH_TEXT = response;
+      // TEST_SPEECH_TEXT = response;
       app.ask(response);
     });
   }
@@ -46,17 +46,23 @@ exports.preppi = functions.https.onRequest((request, response) => {
   function processSpeech (app) {
     let text = app.getArgument(SPEECH_ARGUMENT);
     let response = compareSpeech(text);
-    let results = text_compare.htmlOfMissed();
+    let missedResults = text_compare.htmlOfMissed(TEST_SPEECH_TEXT, text);
+    let addedResults = text_compare.htmlOfAdded(TEST_SPEECH_TEXT, text);
 
-    app.ask(app.buildRichResponse()
-      // Create a basic card and add it to the rich response
-        .addSimpleResponse(response)
-        .addBasicCard(app.buildBasicCard(results)
-        .setTitle('Results From Current Session')
-      )
-    );
-
-  }
+  app.askWithList('Results From Curren Session',
+  // Build a list
+  app.buildList('Results From Current Session')
+    // Add the first item to the list
+    .addItems(app.buildOptionItem('Original Text', ['', '', '', ''])
+      .setTitle('What you wanted to say')
+      .setDescription(missedResults))
+    // Add the second item to the list
+    .addItems(app.buildOptionItem('User Text', ['', '', '', ''])
+      .setTitle('What you said')
+      .setDescription(addedResults)
+    )
+  );
+}
 
   function compareSpeech (text) {
     if (text == TEST_SPEECH_TEXT) {
@@ -67,12 +73,9 @@ exports.preppi = functions.https.onRequest((request, response) => {
     }
   }
 
-
-
-
   // d. build an action map, which maps intent names to functions
   let actionMap = new Map();
-  actionMap.set(LOAD_ACTION, loadDocument);
+  //actionMap.set(LOAD_ACTION, loadDocument);
   actionMap.set(SPEECH_ACTION, processSpeech);
 
 

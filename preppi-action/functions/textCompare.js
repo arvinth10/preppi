@@ -14,19 +14,19 @@ module.exports.getDifferenceMissedArray = function  (correctText, speechText){
 
   };
 
-  var output = prettydiff.api(args); 
+  var output = prettydiff.api(args);
 
   const htmlOut = new JSDOM(output[0]);
   var missedWordsElem =  htmlOut.window.document.getElementsByClassName('diff-left')[0].querySelectorAll("em"); // .textContent
 
   var missedWords  = [];
   for (var num in missedWordsElem){
-    if (missedWordsElem[num].textContent != '' && missedWordsElem[num].textContent != null){ 
+    if (missedWordsElem[num].textContent != '' && missedWordsElem[num].textContent != null){
       missedWords.push(missedWordsElem[num].textContent );
     }
 
   }
- 
+
 return missedWords;
 
 }
@@ -41,20 +41,25 @@ module.exports.htmlOfMissed = function (correctText, speechText){
     lang : "text"
   };
 
-  var output = prettydiff.api(args); 
+  var output = prettydiff.api(args);
 
   const htmlOut = new JSDOM(output[0]);
 
-  var htmlContent = htmlOut.window.document.getElementsByClassName('diff-left')[0].getElementsByClassName('replace')[0];
-  var stringNeed = htmlContent.innerHTML;
-
-  stringNeed = stringNeed.replaceAll("<em>", "\n **");
-  stringNeed = stringNeed.replaceAll("</em>", "**");
-  
-  return stringNeed;
-
+  try {
+    var htmlContent = htmlOut.window.document.getElementsByClassName('diff-left')[0].getElementsByClassName('replace')[0];
+    var stringNeed = htmlContent.innerHTML;
+    console.log(stringNeed);
+    stringNeed = stringNeed.replaceAll("<em></em>", "");
+    stringNeed = stringNeed.replaceAll("<em>", " **");
+    stringNeed = stringNeed.replaceAll("</em>", "** ");
+    console.log(stringNeed);
+    return stringNeed;
+  } catch (err) {
+    return correctText;
+  }
 
 }
+
 
 //Return html string of speech text with highlight of added words
 module.exports.htmlOfAdded = function(correctText, speechText){
@@ -64,18 +69,20 @@ module.exports.htmlOfAdded = function(correctText, speechText){
     lang : "text"
   };
 
-  var output = prettydiff.api(args); 
+  var output = prettydiff.api(args);
 
   const htmlOut = new JSDOM(output[0]);
 
-  var htmlContent = htmlOut.window.document.getElementsByClassName('diff-right')[0].getElementsByClassName('replace')[0];
-  var stringNeed = htmlContent.innerHTML;
-
-  stringNeed = stringNeed.replaceAll("<em>", "\n **");
-  stringNeed = stringNeed.replaceAll("</em>", "**");
-  
-  return stringNeed;
-
+  try {
+    var htmlContent = htmlOut.window.document.getElementsByClassName('diff-right')[0].getElementsByClassName('replace')[0];
+    var stringNeed = htmlContent.innerHTML;
+    stringNeed = stringNeed.replaceAll("<em></em>", "");
+    stringNeed = stringNeed.replaceAll("<em>", " **");
+    stringNeed = stringNeed.replaceAll("</em>", "** ");
+    return stringNeed;
+  } catch (err) {
+    return correctText;
+  }
 
 }
 //Got from: https://stackoverflow.com/questions/1144783/how-to-replace-all-occurrences-of-a-string-in-javascript
@@ -94,7 +101,7 @@ module.exports.getDifferenceAddedArray = function (correctText, speechText){
     lang : "text"
   };
 
-  var output = prettydiff.api(args); 
+  var output = prettydiff.api(args);
 
   const htmlOut = new JSDOM(output[0]);
   var addedWordElem =  htmlOut.window.document.getElementsByClassName('diff-right')[0].querySelectorAll("em"); // "Hello world"
@@ -106,9 +113,7 @@ module.exports.getDifferenceAddedArray = function (correctText, speechText){
       addedWords.push(addedWordElem[num].textContent );
     }
   }
-  
-return addedWords; 
+
+return addedWords;
 
 }
-
-
