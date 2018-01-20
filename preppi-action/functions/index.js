@@ -52,8 +52,8 @@ exports.preppi = functions.https.onRequest((request, response) => {
   function processSpeech (app) {
     let text = app.getArgument(SPEECH_ARGUMENT);
     let response = compareSpeech(text);
-    let missedResults = text_compare.htmlOfMissed(TEST_SPEECH_TEXT, text);
-    let addedResults = text_compare.htmlOfAdded(TEST_SPEECH_TEXT, text);
+    let missedResults = text_compare.textMissed(TEST_SPEECH_TEXT, text);
+    let addedResults = text_compare.textAdded(TEST_SPEECH_TEXT, text);
     app.askWithList('Results From Curren Session',
     // Build a list
     app.buildList('Results From Current Session')

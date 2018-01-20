@@ -1,90 +1,57 @@
-const prettydiff = require("prettydiff");
-const jsdom = require("jsdom");
-const { JSDOM } = jsdom;
-const domtoimage = require('dom-to-image');
-const FileSaver = require('file-saver');
+const JsDiff = require("diff");
 
- //Returns an array of missed words
-module.exports.getDifferenceMissedArray = function  (correctText, speechText){
 
-  var args = {
-    source : correctText,
-    diff : speechText,
-    lang : "text"
+//Returns a string of text missed with bolding done
+module.exports.textMissed = function (correctText, speechText){
 
-  };
+  var diff = JsDiff.diffWords(correctText, speechText);
 
-  var output = prettydiff.api(args);
+  var stringToReturn = "";
 
-  const htmlOut = new JSDOM(output[0]);
-  var missedWordsElem =  htmlOut.window.document.getElementsByClassName('diff-left')[0].querySelectorAll("em"); // .textContent
+  diff.forEach(function(part){
 
-  var missedWords  = [];
-  for (var num in missedWordsElem){
-    if (missedWordsElem[num].textContent != '' && missedWordsElem[num].textContent != null){
-      missedWords.push(missedWordsElem[num].textContent );
-    }
+      if(part.removed == true){
+        stringToReturn = stringToReturn.concat(" **");
+        stringToReturn = stringToReturn.concat(part.value);
+        stringToReturn = stringToReturn.concat("**");
+      }else if (part.added == false){
+        stringToReturn = stringToReturn.concat(part.value);
+      }
 
-  }
+  });
 
-return missedWords;
+  return stringToReturn;
+
+
+
 
 }
 
 
+//Returns a string of added text with bolding done
+module.exports.textAdded = function (correctText, speechText){
 
-//Return html string of base text including highlight of missed words
-module.exports.htmlOfMissed = function (correctText, speechText){
-    var args = {
-    source : correctText,
-    diff : speechText,
-    lang : "text"
-  };
+  var diff = JsDiff.diffWords(correctText, speechText);
 
-  var output = prettydiff.api(args);
+  var stringToReturn = "";
 
-  const htmlOut = new JSDOM(output[0]);
+  diff.forEach(function(part){
 
-  try {
-    var htmlContent = htmlOut.window.document.getElementsByClassName('diff-left')[0].getElementsByClassName('replace')[0];
-    var stringNeed = htmlContent.innerHTML;
-    console.log(stringNeed);
-    stringNeed = stringNeed.replaceAll("<em></em>", "");
-    stringNeed = stringNeed.replaceAll("<em>", " **");
-    stringNeed = stringNeed.replaceAll("</em>", "** ");
-    console.log(stringNeed);
-    return stringNeed;
-  } catch (err) {
-    return correctText;
-  }
+      if(part.added == true){
+        stringToReturn = stringToReturn.concat(" **");
+        stringToReturn = stringToReturn.concat(part.value);
+        stringToReturn = stringToReturn.concat("**");
+      }else if (part.removed == false){
+        stringToReturn = stringToReturn.concat(part.value);
+      }
+
+  });
+
+  return stringToReturn;
 
 }
 
 
-//Return html string of speech text with highlight of added words
-module.exports.htmlOfAdded = function(correctText, speechText){
-    var args = {
-    source : correctText,
-    diff : speechText,
-    lang : "text"
-  };
-
-  var output = prettydiff.api(args);
-
-  const htmlOut = new JSDOM(output[0]);
-
-  try {
-    var htmlContent = htmlOut.window.document.getElementsByClassName('diff-right')[0].getElementsByClassName('replace')[0];
-    var stringNeed = htmlContent.innerHTML;
-    stringNeed = stringNeed.replaceAll("<em></em>", "");
-    stringNeed = stringNeed.replaceAll("<em>", " **");
-    stringNeed = stringNeed.replaceAll("</em>", "** ");
-    return stringNeed;
-  } catch (err) {
-    return correctText;
-  }
-
-}
 //Got from: https://stackoverflow.com/questions/1144783/how-to-replace-all-occurrences-of-a-string-in-javascript
 String.prototype.replaceAll = function(search, replacement) {
     var target = this;
@@ -95,25 +62,38 @@ String.prototype.replaceAll = function(search, replacement) {
 
 //Returns an array of added words
 module.exports.getDifferenceAddedArray = function (correctText, speechText){
-  var args = {
-    source : correctText,
-    diff : speechText,
-    lang : "text"
-  };
 
-  var output = prettydiff.api(args);
+  var diff = JsDiff.diffWords(correctText, speechText);
 
-  const htmlOut = new JSDOM(output[0]);
-  var addedWordElem =  htmlOut.window.document.getElementsByClassName('diff-right')[0].querySelectorAll("em"); // "Hello world"
+  var arrayToReturn = [];
 
+  diff.forEach(function(part){
 
-  var addedWords = [];
-  for (var num in addedWordElem){
-    if(addedWordElem[num].textContent != '' && addedWordElem[num].textContent != null){
-      addedWords.push(addedWordElem[num].textContent );
+    if(part.added == true){
+        arrayToReturn.push(part.value);
     }
-  }
 
-return addedWords;
+  });
+
+  return arrayToReturn;
+
+}
+
+//Return an array of missed words
+module.exports.getDifferenceMissedArray = function (correctText, speechText){
+
+  var diff = JsDiff.diffWords(correctText, speechText);
+
+  var arrayToReturn = [];
+
+  diff.forEach(function(part){
+
+    if(part.removed == true){
+        arrayToReturn.push(part.value);
+    }
+
+  });
+
+  return arrayToReturn;
 
 }
