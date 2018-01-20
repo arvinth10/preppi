@@ -29,13 +29,14 @@ exports.preppi = functions.https.onRequest((request, response) => {
   // console.log('Request headers: ' + JSON.stringify(request.headers));
   // console.log('Request body: ' + JSON.stringify(request.body));
 
-// This function is used to handle the welcome intent
-// In Dialogflow, the Default Welcome Intent ('input.welcome' action)
+  // This function is used to handle the welcome intent
+  // In Dialogflow, the Default Welcome Intent ('input.welcome' action)
+
   function welcomeUser (app) {
     if (app.getLastSeen()) {
-      app.ask(`Hey, welcome back...`);
+      app.ask(`Hi there, welcome back! How would you like to prepare with preppi?`);
     } else {
-      app.ask('Welcome to Preppi...');
+      app.ask('Hello, I am preppi! I am the action that will help you prepare and memorize.');
     }
   }
 
