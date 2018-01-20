@@ -28,10 +28,10 @@ exports.preppi = functions.https.onRequest((request, response) => {
 // c. The function that generates the silly name
   function loadDocument (app) {
     let doc_name = app.getArgument(DOC_NAME_ARGUMENT);
-    //let color = app.getArgument(COLOR_ARGUMENT);
-    app.tell('Alright, your document name is ' +
-      doc_name + ' ' +
-      '! See you next time.');
+
+    fb_database.findDocName(doc_name).then(function(response){
+      app.tell(response);
+    });
   }
   // d. build an action map, which maps intent names to functions
   let actionMap = new Map();

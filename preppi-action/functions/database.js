@@ -24,3 +24,21 @@ module.exports.setupSessionsTable = function () {
     }
   });
 }
+
+module.exports.findDocName = function (docName) {
+
+  return new Promise(function (resolve, reject){
+
+    var ref = database.ref("/documents");
+
+    // Attach an asynchronous callback to read the data at our posts reference
+    ref.on("value", function(snapshot) {
+      if (snapshot.val().name == docName) {
+        resolve(snapshot.val().content_of_doc);
+      }
+    }, function (errorObject) {
+      reject("The read failed: " + errorObject.code);
+    });
+
+  });
+}
