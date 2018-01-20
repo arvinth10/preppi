@@ -29,14 +29,25 @@ exports.preppi = functions.https.onRequest((request, response) => {
   // console.log('Request headers: ' + JSON.stringify(request.headers));
   // console.log('Request body: ' + JSON.stringify(request.body));
 
+  const HELP_PROMPTS = [
+    "There's a lot you might want to know about preppi, and I can tell you all about it, like where it is and what the sessions are. What do you want to know?",
+    "preppi can be a little overwhelming, so I'm here to help. Let me know if you need any help figuring out the event, like when it is, or what the sessions are. What do you want to know?"
+  ];
+
+  // Intent handler
+  function help (app) {
+      ask(app, promptFetch.getHelpPrompt(), // fetches random entry from HELP_PROMPTS
+        promptFetch.getGeneralNoInputPrompts());
+  }
+
   // This function is used to handle the welcome intent
   // In Dialogflow, the Default Welcome Intent ('input.welcome' action)
 
   function welcomeUser (app) {
     if (app.getLastSeen()) {
-      app.ask(`Hi there, welcome back! How would you like to prepare with preppi?`);
+      app.ask('Hi there, welcome back! How would you like to prepare with preppi?');
     } else {
-      app.ask('Hello, I am preppi! I am the action that will help you prepare and memorize.');
+      app.ask('Hello, I am preppi! I am the action that will help you prepare and memorize.\n To start preparing on a document you can tell me which document to load by saying "load" before the document name.\n After loading a document you can start a preperation session by saying "start session".');
     }
   }
 
