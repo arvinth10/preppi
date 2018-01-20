@@ -1,0 +1,22 @@
+{
+  "name": "preppi",
+  "version": "1.0.0",
+  "description": "Google home action that helps people prepare for presentations",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mathu97/preppi.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+       "firebase-tools": "^3.17.3" 
+  },
+  "bugs": {
+    "url": "https://github.com/mathu97/preppi/issues"
+  },
+  "homepage": "https://github.com/mathu97/preppi#readme"
+}
