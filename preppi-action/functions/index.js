@@ -16,13 +16,9 @@ const jsdom = require("jsdom");
 const domtoimage = require('dom-to-image');
 const { JSDOM } = jsdom;
 
-// a. the action name from the make_name Dialogflow intent
-  // const NAME_ACTION = 'make_name';
+const WELCOME_ACTION = 'input.welcome';
 const LOAD_ACTION = 'load_document';
 const SPEECH_ACTION = 'get_userText';
-// b. the parameters that are parsed from the make_name intent
-  // const COLOR_ARGUMENT = 'color';
-  // const NUMBER_ARGUMENT = 'number';
 const DOC_NAME_ARGUMENT = 'given-name';
 const SPEECH_ARGUMENT = 'userText';
 const TEST_SPEECH_TEXT = "what is your face?";
@@ -33,7 +29,16 @@ exports.preppi = functions.https.onRequest((request, response) => {
   // console.log('Request headers: ' + JSON.stringify(request.headers));
   // console.log('Request body: ' + JSON.stringify(request.body));
 
-// c. The function that generates the silly name
+// This function is used to handle the welcome intent
+// In Dialogflow, the Default Welcome Intent ('input.welcome' action)
+  function welcomeUser (app) {
+    if (app.getLastSeen()) {
+      app.ask(`Hey, welcome back...`);
+    } else {
+      app.ask('Welcome to Preppi...');
+    }
+  }
+
   function loadDocument (app) {
     let doc_name = app.getArgument(DOC_NAME_ARGUMENT);
 
@@ -48,10 +53,9 @@ exports.preppi = functions.https.onRequest((request, response) => {
     let response = compareSpeech(text);
     let missedResults = text_compare.htmlOfMissed(TEST_SPEECH_TEXT, text);
     let addedResults = text_compare.htmlOfAdded(TEST_SPEECH_TEXT, text);
-
-  app.askWithList('Results From Curren Session',
-  // Build a list
-  app.buildList('Results From Current Session')
+    app.askWithList('Results From Curren Session',
+    // Build a list
+    app.buildList('Results From Current Session')
     // Add the first item to the list
     .addItems(app.buildOptionItem('Original Text', ['', '', '', ''])
       .setTitle('What you wanted to say')
@@ -61,8 +65,7 @@ exports.preppi = functions.https.onRequest((request, response) => {
       .setTitle('What you said')
       .setDescription(addedResults)
     )
-  );
-}
+  );}
 
   function compareSpeech (text) {
     if (text == TEST_SPEECH_TEXT) {
@@ -73,9 +76,9 @@ exports.preppi = functions.https.onRequest((request, response) => {
     }
   }
 
-  // d. build an action map, which maps intent names to functions
   let actionMap = new Map();
-  //actionMap.set(LOAD_ACTION, loadDocument);
+  actionMap.set(WELCOME_ACTION, welcomeUser)
+  actionMap.set(LOAD_ACTION, loadDocument);
   actionMap.set(SPEECH_ACTION, processSpeech);
 
 
