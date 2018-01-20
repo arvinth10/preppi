@@ -20,7 +20,7 @@ const SPEECH_ACTION = 'get_userText';
   // const NUMBER_ARGUMENT = 'number';
 const DOC_NAME_ARGUMENT = 'given-name';
 const SPEECH_ARGUMENT = 'userText';
-
+const TEST_SPEECH_TEXT = 'dog dog dog'
 fb_database.setupSessionsTable();
 
 exports.preppi = functions.https.onRequest((request, response) => {
@@ -39,7 +39,26 @@ exports.preppi = functions.https.onRequest((request, response) => {
 
   function processSpeech (app) {
     let text = app.getArgument(SPEECH_ARGUMENT);
-    app.tell(text);
+    let response = compareSpeech(text);
+
+    app.ask(app.buildRichResponse()
+      // Create a basic card and add it to the rich response
+      .addSimpleResponse(response)
+      .addBasicCard(app.buildBasicCard('SHOW HTML TABLE HERE')
+        .setTitle('Results From Current Session')
+        .setImageDisplay('CROPPED')
+      )
+    );
+
+  }
+
+  function compareSpeech (text) {
+    if (text == TEST_SPEECH_TEXT) {
+      return "Correct! Would you like to change documents?"
+    }
+    else {
+      return "Wrong! Would you like to retry?"
+    }
   }
 
   // d. build an action map, which maps intent names to functions
