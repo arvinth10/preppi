@@ -43,7 +43,7 @@ exports.preppi = functions.https.onRequest((request, response) => {
 
   // d. build an action map, which maps intent names to functions
   let actionMap = new Map();
-  // actionMap.set(LOAD_ACTION, loadDocument);
+  actionMap.set(LOAD_ACTION, loadDocument);
   actionMap.set(SPEECH_ACTION, processSpeech);
 
 
