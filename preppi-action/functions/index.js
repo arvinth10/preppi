@@ -43,9 +43,10 @@ exports.preppi = functions.https.onRequest((request, response) => {
 
     app.ask(app.buildRichResponse()
       // Create a basic card and add it to the rich response
-      .addSimpleResponse(response)
-      .addBasicCard(app.buildBasicCard('SHOW HTML TABLE HERE')
+        .addSimpleResponse(response)
+        .addBasicCard(app.buildBasicCard('SHOW HTML TABLE HERE')
         .setTitle('Results From Current Session')
+        .setImage('https://example.google.com/42.png', 'Session Results')
         .setImageDisplay('CROPPED')
       )
     );
