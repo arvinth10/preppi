@@ -12,6 +12,7 @@ const functions = require('firebase-functions');
 const fb_database = require('./database.js');
 const prettydiff = require("prettydiff");
 const jsdom = require("jsdom");
+const domtoimage = require('dom-to-image');
 const { JSDOM } = jsdom;
 
 // a. the action name from the make_name Dialogflow intent
@@ -23,7 +24,7 @@ const SPEECH_ACTION = 'get_userText';
   // const NUMBER_ARGUMENT = 'number';
 const DOC_NAME_ARGUMENT = 'given-name';
 const SPEECH_ARGUMENT = 'userText';
-const TEST_SPEECH_TEXT = 'dog dog dog'
+const TEST_SPEECH_TEXT = "";
 fb_database.setupSessionsTable();
 
 exports.preppi = functions.https.onRequest((request, response) => {
@@ -36,6 +37,7 @@ exports.preppi = functions.https.onRequest((request, response) => {
     let doc_name = app.getArgument(DOC_NAME_ARGUMENT);
 
     fb_database.findDocName(doc_name).then(function(response){
+      TEST_SPEECH_TEXT = response;
       app.ask(response);
     });
   }
@@ -76,19 +78,19 @@ function getDifferenceMissedArray (correctText, speechText){
 
   };
 
-  var output = prettydiff.api(args); 
+  var output = prettydiff.api(args);
 
   const htmlOut = new JSDOM(output[0]);
   var missedWordsElem =  htmlOut.window.document.getElementsByClassName('diff-left')[0].querySelectorAll("em"); // .textContent
 
   var missedWords  = [];
   for (var num in missedWordsElem){
-    if (missedWordsElem[num].textContent != '' && missedWordsElem[num].textContent != null){ 
+    if (missedWordsElem[num].textContent != '' && missedWordsElem[num].textContent != null){
       missedWords.push(missedWordsElem[num].textContent );
     }
 
   }
- 
+
 return missedWords;
 
 }
@@ -101,7 +103,7 @@ function getDifferenceAddedArray (correctText, speechText){
     lang : "text"
   };
 
-  var output = prettydiff.api(args); 
+  var output = prettydiff.api(args);
 
   const htmlOut = new JSDOM(output[0]);
   var addedWordElem =  htmlOut.window.document.getElementsByClassName('diff-right')[0].querySelectorAll("em"); // "Hello world"
@@ -113,8 +115,8 @@ function getDifferenceAddedArray (correctText, speechText){
       addedWords.push(addedWordElem[num].textContent );
     }
   }
-  
-return addedWords; 
+
+return addedWords;
 
 }
 
