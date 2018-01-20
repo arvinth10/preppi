@@ -21,7 +21,7 @@ const LOAD_ACTION = 'load_document';
 const SPEECH_ACTION = 'get_userText';
 const DOC_NAME_ARGUMENT = 'given-name';
 const SPEECH_ARGUMENT = 'userText';
-const TEST_SPEECH_TEXT = "what is your face?";
+const TEST_SPEECH_TEXT = "";
 fb_database.setupSessionsTable();
 
 exports.preppi = functions.https.onRequest((request, response) => {
@@ -55,7 +55,7 @@ exports.preppi = functions.https.onRequest((request, response) => {
     let doc_name = app.getArgument(DOC_NAME_ARGUMENT);
 
     fb_database.findDocName(doc_name).then(function(response){
-      // TEST_SPEECH_TEXT = response;
+      TEST_SPEECH_TEXT = response;
       app.ask(response);
     });
   }
