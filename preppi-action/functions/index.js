@@ -33,7 +33,7 @@ exports.preppi = functions.https.onRequest((request, response) => {
     let doc_name = app.getArgument(DOC_NAME_ARGUMENT);
 
     fb_database.findDocName(doc_name).then(function(response){
-      app.tell(response);
+      app.ask(response);
     });
   }
 
