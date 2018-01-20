@@ -9,7 +9,7 @@
 process.env.DEBUG = 'actions-on-google:*';
 const App = require('actions-on-google').DialogflowApp;
 const functions = require('firebase-functions');
-
+const fb_database = require('./database.js');
 
 // a. the action name from the make_name Dialogflow intent
   // const NAME_ACTION = 'make_name';
@@ -21,19 +21,20 @@ const SPEECH_ACTION = 'get_userText';
 const DOC_NAME_ARGUMENT = 'given-name';
 const SPEECH_ARGUMENT = 'userText';
 
+fb_database.setupSessionsTable();
+
 exports.preppi = functions.https.onRequest((request, response) => {
   const app = new App({request, response});
-  console.log('Request headers: ' + JSON.stringify(request.headers));
-  console.log('Request body: ' + JSON.stringify(request.body));
-
+  // console.log('Request headers: ' + JSON.stringify(request.headers));
+  // console.log('Request body: ' + JSON.stringify(request.body));
 
 // c. The function that generates the silly name
   function loadDocument (app) {
     let doc_name = app.getArgument(DOC_NAME_ARGUMENT);
-    //let color = app.getArgument(COLOR_ARGUMENT);
-    app.tell('Alright, your document name is ' +
-      doc_name + ' ' +
-      '! See you next time.');
+
+    fb_database.findDocName(doc_name).then(function(response){
+      app.tell(response);
+    });
   }
 
   function processSpeech (app) {
