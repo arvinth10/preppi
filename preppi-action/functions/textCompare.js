@@ -11,9 +11,9 @@ module.exports.textMissed = function (correctText, speechText){
   diff.forEach(function(part){
 
       if(part.removed == true){
-        stringToReturn = stringToReturn.concat("**");
+        stringToReturn = stringToReturn.concat(" **");
         stringToReturn = stringToReturn.concat(part.value);
-        stringToReturn = stringToReturn.concat("**");
+        stringToReturn = stringToReturn.concat("** ");
       }else {
         stringToReturn = stringToReturn.concat(part.value);
       }
@@ -38,9 +38,9 @@ module.exports.textAdded = function (correctText, speechText){
   diff.forEach(function(part){
 
       if(part.added == true){
-        stringToReturn = stringToReturn.concat("**");
+        stringToReturn = stringToReturn.concat(" **");
         stringToReturn = stringToReturn.concat(part.value);
-        stringToReturn = stringToReturn.concat("**");
+        stringToReturn = stringToReturn.concat("** ");
       }else {
         stringToReturn = stringToReturn.concat(part.value);
       }
@@ -62,7 +62,7 @@ String.prototype.replaceAll = function(search, replacement) {
 
 //Returns an array of added words
 module.exports.getDifferenceAddedArray = function (correctText, speechText){
-  
+
   var diff = JsDiff.diffWords(correctText, speechText);
 
   var arrayToReturn = [];
@@ -81,7 +81,7 @@ module.exports.getDifferenceAddedArray = function (correctText, speechText){
 
 //Return an array of missed words
 module.exports.getDifferenceMissedArray = function (correctText, speechText){
-  
+
   var diff = JsDiff.diffWords(correctText, speechText);
 
   var arrayToReturn = [];
