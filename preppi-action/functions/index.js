@@ -11,6 +11,7 @@ const App = require('actions-on-google').DialogflowApp;
 const functions = require('firebase-functions');
 const fb_database = require('./database.js');
 const text_compare = require('./textCompare.js');
+const calc_functions = require('./calculations.js');
 const prettydiff = require("prettydiff");
 const jsdom = require("jsdom");
 const domtoimage = require('dom-to-image');
@@ -59,16 +60,29 @@ exports.preppi = functions.https.onRequest((request, response) => {
 
   function processSpeech (app) {
     let text = app.getArgument(SPEECH_ARGUMENT);
+    // app.data = {speech_text: "My name is shiv"};
     let response = compareSpeech(text, app.data.speech_text);
+
     let missedResults = text_compare.textMissed(app.data.speech_text, text);
     let addedResults = text_compare.textAdded(app.data.speech_text, text);
+    let addedArray = text_compare.getDifferenceAddedArray(app.data.speech_text, text);
+    let missedArray = text_compare.getDifferenceMissedArray(app.data.speech_text, text);
+
+    let mostMissed = calc_functions.mostMissed(missedArray);
+    let missedNum = calc_functions.wordCount(missedArray).toString();
+    let addedNum = calc_functions.wordCount(addedArray).toString();
+    let hitRate = calc_functions.percentage(missedArray, app.data.speech_text).toString();
+
+
     app.ask(app.buildRichResponse()
       // Create a basic card and add it to the rich response
       .addSimpleResponse('Here are the stats for your current session.')
       .addBasicCard(app.buildBasicCard("*What You Wanted To Say*  \n" + missedResults
                                      + "  \n  -----  \n" + "*What You Said*  \n" + addedResults)
       .setTitle('Results From Current Session')
-      .addButton('View Detailed Stats Report', 'http://100.64.214.107/api/stats')
+      .addButton('View Detailed Stats Report', 'http://100.64.214.107/api/stats?mostMissed=' + mostMissed
+                                                + '&missedNum=' + missedNum + '&addedNum=' + addedNum
+                                                + '&hitRate=' + hitRate)
       )
     );
   }
@@ -78,7 +92,7 @@ exports.preppi = functions.https.onRequest((request, response) => {
       return "Correct! Would you like to change documents?"
     }
     else {
-      return "text: " + text + " ; TEST_SPEECH_TEXT: " + speech_text + " ;Wrong! Would you like to retry?"
+      return "Wrong! Would you like to retry?"
     }
   }
 

@@ -1,6 +1,4 @@
 const JsDiff = require("diff");
-const request = require('request');
-
 
 //Returns a string of text missed with bolding done
 module.exports.textMissed = function (correctText, speechText){
@@ -95,12 +93,11 @@ module.exports.getDifferenceMissedArray = function (correctText, speechText){
 
 }
 
-module.export.sendJSONforStats = function (textMissed, textAdded, arrayMissed, arrayAdded){
-  var sendJSON = {"textMissed" : textMissed, "textAdded" : textAdded, "arrayMissed" : arrayMissed, "arrayAdded" : arrayAdded}; 
-
-    request.post({
-        url: "http://100.64.214.107/api/stats",
-        json: true, 
-        body: sendJSON
-     });
-}
+// module.export.sendJSONforStats = function (textMissed, textAdded, arrayMissed, arrayAdded){
+//   var sendJSON = {"textMissed" : textMissed, "textAdded" : textAdded, "arrayMissed" : arrayMissed, "arrayAdded" : arrayAdded};
+//     request.post({
+//         url: "http://100.64.214.107/api/stats",
+//         json: true,
+//         body: sendJSON
+//      });
+// }
