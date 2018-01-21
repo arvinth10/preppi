@@ -80,7 +80,7 @@ exports.preppi = functions.https.onRequest((request, response) => {
       .addBasicCard(app.buildBasicCard("*What You Wanted To Say*  \n" + missedResults
                                      + "  \n  -----  \n" + "*What You Said*  \n" + addedResults)
       .setTitle('Results From Current Session')
-      .addButton('View Detailed Stats Report', 'http://100.64.214.107/api/stats?mostMissed=' + mostMissed
+      .addButton('View Detailed Stats Report', 'http://100.64.214.107:5000/api/stats?mostMissed=' + mostMissed
                                                 + '&missedNum=' + missedNum + '&addedNum=' + addedNum
                                                 + '&hitRate=' + hitRate + '&missedResults=' + missedResults
                                                 + '&addedResults=' + addedResults)
