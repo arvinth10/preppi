@@ -82,7 +82,8 @@ exports.preppi = functions.https.onRequest((request, response) => {
       .setTitle('Results From Current Session')
       .addButton('View Detailed Stats Report', 'http://100.64.214.107/api/stats?mostMissed=' + mostMissed
                                                 + '&missedNum=' + missedNum + '&addedNum=' + addedNum
-                                                + '&hitRate=' + hitRate)
+                                                + '&hitRate=' + hitRate + '&missedResults=' + missedResults
+                                                + '&addedResults=' + addedResults)
       )
     );
   }
