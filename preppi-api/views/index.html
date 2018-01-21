@@ -1,0 +1,70 @@
+{% extends "_base.html" %}
+
+{% block content %}
+<body>
+
+  <!--  Variables we get here from app.py -->
+  <!-- mostMissed, missedNum, addedNum, hitRate, missedResults, addedResults -->
+
+<!-- Page Content -->
+<div class="container">
+
+    <!--
+      <h2>Missed Results: {{missedResults}}</h2>
+      <h2>Added Results: {{addedResults}}</h2>
+      <p>Most Missed: {{mostMissed}}</p>
+      <p>Number of Missed: {{missedNum}}</p>
+      <p>Number of Added: {{addedNum}}</p>
+      <p>Hit Rate: {{hitRate}}</p> -->
+
+      <input type="hidden" value={{missedNum}} id="missedNum" />
+      <input type="hidden" value={{addedNum}} id="addedNum" />
+
+      <div class="row">
+
+        <div class="col-md-6">
+          <div class="card text-white bg-secondary my-4 text-center">
+            <div class="card-body">
+              <h2 class="text-black m-0">Text To Be Memorized</h2>
+            </div>
+            <div class="card-footer">
+              <p class="missedResultsText">{{missedResults}}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="card text-white bg-secondary my-4 text-center">
+            <div class="card-body">
+              <h2 class="text-black m-0">Session Results</h2>
+            </div>
+            <div class="card-footer">
+              <p class="addedResultsText">{{addedResults}}</p>
+            </div>
+          </div>
+        </div>
+
+    </div>
+
+<div class="row">
+  <div class="col-md-6">
+    <div id="bars" class="center">
+	<div class="bar" data-percent={{hitRate}}>
+		<h3>Hit Rate</h3>
+		<canvas class="bar-circle" width="70" height="70"></canvas>
+	</div>
+</div>
+</div>
+
+<div class="col-md-6">
+<div id="chartdiv"></div></div>
+
+</div>
+
+
+
+
+
+</container>
+</body>
+{% endblock %}
