@@ -1,2 +1,2 @@
 # Preppi
-Google home action that helps people prepare for presentations
+A Google Action that helps people prepare for presentations and memorize things.
