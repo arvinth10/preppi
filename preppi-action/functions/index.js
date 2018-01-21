@@ -21,13 +21,11 @@ const LOAD_ACTION = 'load_document';
 const SPEECH_ACTION = 'get_userText';
 const DOC_NAME_ARGUMENT = 'given-name';
 const SPEECH_ARGUMENT = 'userText';
-var TEST_SPEECH_TEXT = "";
+
 fb_database.setupSessionsTable();
 
 exports.preppi = functions.https.onRequest((request, response) => {
   const app = new App({request, response});
-  // console.log('Request headers: ' + JSON.stringify(request.headers));
-  // console.log('Request body: ' + JSON.stringify(request.body));
 
   const HELP_PROMPTS = [
     "There's a lot you might want to know about preppi, and I can tell you all about it, like where it is and what the sessions are. What do you want to know?",
@@ -54,17 +52,16 @@ exports.preppi = functions.https.onRequest((request, response) => {
   function loadDocument (app) {
     let doc_name = app.getArgument(DOC_NAME_ARGUMENT);
     fb_database.findDocName(doc_name).then(function(response){
-       TEST_SPEECH_TEXT = response;
+       app.data = {speech_text: response};
        app.ask("Your document has been prepared, you can now start a session.");
      });
   }
 
   function processSpeech (app) {
     let text = app.getArgument(SPEECH_ARGUMENT);
-    let response = compareSpeech(text);
-    let missedResults = text_compare.textMissed(TEST_SPEECH_TEXT, text);
-    let addedResults = text_compare.textAdded(TEST_SPEECH_TEXT, text);
-
+    let response = compareSpeech(text, app.data.speech_text);
+    let missedResults = text_compare.textMissed(app.data.speech_text, text);
+    let addedResults = text_compare.textAdded(app.data.speech_text, text);
     app.ask(app.buildRichResponse()
       // Create a basic card and add it to the rich response
       .addSimpleResponse('Here are the stats for your current session.')
@@ -75,12 +72,12 @@ exports.preppi = functions.https.onRequest((request, response) => {
     );
   }
 
-  function compareSpeech (text) {
-    if (text == TEST_SPEECH_TEXT) {
+  function compareSpeech (text, speech_text) {
+    if (text == speech_text) {
       return "Correct! Would you like to change documents?"
     }
     else {
-      return "Wrong! Would you like to retry?"
+      return "text: " + text + " ; TEST_SPEECH_TEXT: " + speech_text + " ;Wrong! Would you like to retry?"
     }
   }
 
@@ -90,5 +87,6 @@ exports.preppi = functions.https.onRequest((request, response) => {
   actionMap.set(SPEECH_ACTION, processSpeech);
 
 
-app.handleRequest(actionMap);
+  app.handleRequest(actionMap);
+
 });

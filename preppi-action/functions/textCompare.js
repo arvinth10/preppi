@@ -12,7 +12,8 @@ module.exports.textMissed = function (correctText, speechText){
 
       if(part.removed == true){
         stringToReturn = stringToReturn.concat(" **");
-        stringToReturn = stringToReturn.concat(part.value);
+        var temp = part.value.replaceAll(" ", "");
+        stringToReturn = stringToReturn.concat(temp);
         stringToReturn = stringToReturn.concat("** ");
       }else if (part.added == undefined){
         stringToReturn = stringToReturn.concat(part.value);
@@ -35,7 +36,7 @@ module.exports.textAdded = function (correctText, speechText){
       if(part.added == true){
         stringToReturn = stringToReturn.concat(" **");
         stringToReturn = stringToReturn.concat(part.value);
-        stringToReturn = stringToReturn.concat("**");
+        stringToReturn = stringToReturn.concat("** ");
       }else if (part.removed == undefined){
         stringToReturn = stringToReturn.concat(part.value);
       }
