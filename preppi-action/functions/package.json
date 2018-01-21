@@ -17,7 +17,8 @@
     "firebase-admin": "^5.8.1",
     "firebase-functions": "^0.8.1",
     "jsdom": "^11.5.1",
-    "prettydiff": "^99.0.1"
+    "prettydiff": "^99.0.1",
+    "require": "^2.4.20"
   },
   "private": true
 }
