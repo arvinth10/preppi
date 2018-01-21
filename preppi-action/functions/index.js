@@ -73,10 +73,17 @@ exports.preppi = functions.https.onRequest((request, response) => {
     let addedNum = calc_functions.wordCount(addedArray).toString();
     let hitRate = calc_functions.percentage(missedArray, app.data.speech_text).toString();
 
+    var stat_response = "";
+
+    if (mostMissed != null){
+      stat_response = 'Here are the stats for your current session: ... The most missed word was: ' + mostMissed + ' ... You had matched ' + hitRate + '% of the document.'
+    } else {
+      stat_response = 'You have perfectly matched the document! Here are some stats on this session ...'
+    }
 
     app.ask(app.buildRichResponse()
       // Create a basic card and add it to the rich response
-      .addSimpleResponse('Here are the stats for your current session.')
+      .addSimpleResponse(stat_response)
       .addBasicCard(app.buildBasicCard("*What You Wanted To Say*  \n" + missedResults
                                      + "  \n  -----  \n" + "*What You Said*  \n" + addedResults)
       .setTitle('Results From Current Session')
