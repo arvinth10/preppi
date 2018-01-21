@@ -2,7 +2,7 @@ const JsDiff = require("diff");
 
 //Returns a string of text missed with bolding done
 module.exports.textMissed = function (correctText, speechText){
-
+//function textMissed(correctText, speechText){
   var diff = JsDiff.diffWords(correctText, speechText);
 
   var stringToReturn = "";
@@ -11,8 +11,8 @@ module.exports.textMissed = function (correctText, speechText){
 
       if(part.removed == true){
         stringToReturn = stringToReturn.concat(" **");
-        var temp = part.value.replaceAll(" ", "");
-        stringToReturn = stringToReturn.concat(temp);
+        //var temp = part.value.replaceAll(" ", "");
+        stringToReturn = stringToReturn.concat(part.value);
         stringToReturn = stringToReturn.concat("** ");
       }else if (part.added == undefined){
         stringToReturn = stringToReturn.concat(part.value);
@@ -22,7 +22,7 @@ module.exports.textMissed = function (correctText, speechText){
 
   return stringToReturn;
 }
-
+//textMissed("one two three four five six", "one two three")
 //Returns a string of added text with bolding done
 module.exports.textAdded = function (correctText, speechText){
 

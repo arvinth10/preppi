@@ -18,8 +18,8 @@ module.exports.setupSessionsTable = function () {
   console.log("Enterssdfsd");
   database.ref('/').set({
     documents: {
-      name: "My Life",
-      content_of_doc: "Hello My name is Mathusan What is yours",
+      name: "doc",
+      content_of_doc: "one two three four five six seven eight nine ten",
       sessions: []
     }
   });
