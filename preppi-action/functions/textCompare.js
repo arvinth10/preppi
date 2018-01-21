@@ -11,8 +11,8 @@ module.exports.textMissed = function (correctText, speechText){
 
       if(part.removed == true){
         stringToReturn = stringToReturn.concat(" **");
-        //var temp = part.value.replaceAll(" ", "");
-        stringToReturn = stringToReturn.concat(part.value);
+        var temp = part.value.trim();
+        stringToReturn = stringToReturn.concat(temp);
         stringToReturn = stringToReturn.concat("** ");
       }else if (part.added == undefined){
         stringToReturn = stringToReturn.concat(part.value);
@@ -70,13 +70,34 @@ module.exports.getDifferenceAddedArray = function (correctText, speechText){
 
   });
 
-  return arrayToReturn;
+  var splitArray = [];
+  var arr_words = [];
+
+  if (arrayToReturn.length > 0) {
+    for (var i=0; i<arrayToReturn; i++) {
+      var words = arrayToReturn[i];
+      arr_words = words.split(" ");
+      for (var j=0; j<arr_words.length-1; j++){
+        splitArray.push(arr_words[j]);
+      }
+    }
+  }
+  // else {
+  //   var words = arrayToReturn[0];
+  //   arr_words = words.split(" ");
+  //   for (var j=0; j<arr_words.length-1; j++){
+  //     splitArray.push(arr_words[j]);
+  //   }
+  //}
+
+
+  return splitArray;
 
 }
 
 //Return an array of missed words
 module.exports.getDifferenceMissedArray = function (correctText, speechText){
-
+// function getDifferenceMissedArray(correctText, speechText) {
   var diff = JsDiff.diffWords(correctText, speechText);
 
   var arrayToReturn = [];
@@ -89,9 +110,32 @@ module.exports.getDifferenceMissedArray = function (correctText, speechText){
 
   });
 
-  return arrayToReturn;
+  var splitArray = [];
+  var arr_words = [];
+
+  if (arrayToReturn.length > 0) {
+    for (var i=0; i<arrayToReturn.length; i++) {
+      var words = arrayToReturn[i];
+      arr_words = words.split(" ");
+      for (var j=0; j<arr_words.length-1; j++){
+        splitArray.push(arr_words[j]);
+      }
+    }
+  }
+  // else {
+  //   var words = arrayToReturn[0];
+  //   arr_words = words.split(" ");
+  //   for (var j=0; j<arr_words.length; j++){
+  //     splitArray.push(arr_words[j]);
+  //   }
+  //}
+
+
+  return splitArray;
 
 }
+
+// getDifferenceMissedArray("My name is shiv", "My name is not mat");
 
 // module.export.sendJSONforStats = function (textMissed, textAdded, arrayMissed, arrayAdded){
 //   var sendJSON = {"textMissed" : textMissed, "textAdded" : textAdded, "arrayMissed" : arrayMissed, "arrayAdded" : arrayAdded};
